@@ -27,7 +27,53 @@ public class SpringbootJpaApplication implements CommandLineRunner{
 	@Override // CommandLineRunner
 	public void run(String... args) throws Exception {
 		
-		create();
+		personalizedQueries2();
+	}
+
+	@Transactional(readOnly = true)
+	public void personalizedQueries2() { // Método para realizar consultas personalizadas utilizando el repositorio JPA
+		System.out.println("========== Consultas por objeto persona y lenguaje de programación ==========");
+		List<Object[]> personRegs = repository.findAllMixPerson(); // Obtiene los campos personalizados de la persona por su ID utilizando una consulta personalizada
+
+		personRegs.forEach(reg -> {
+			System.out.println("programmingLanguage: " + reg[1] + ", Person: " + reg[0]);
+		}); // Imprime los campos personalizados obtenidos
+
+		System.out.println("========== Consulta que puebla y devuelve objeto entidad persona personalizada ==========");
+		List<Person> persons = repository.findAllObjectPersonPersonalized(); // Obtiene los campos personalizados de la persona por su ID utilizando una consulta personalizada
+		persons.forEach(System.out::println);
+		 // Imprime los campos personalizados obtenidos
+	}	
+
+	@Transactional(readOnly = true)
+	public void personalizedQueries() { // Método para realizar consultas personalizadas utilizando el repositorio JPA
+
+		Scanner scanner = new Scanner(System.in);
+
+		System.out.println("========== Consultas Personalizadas ==========");
+		System.out.println("Ingresa el ID de la persona: ");
+		Long id = scanner.nextLong(); // Lee el ID ingresado por el usuario
+		scanner.close(); // Cierra el scanner para liberar recursos
+		
+		System.out.println("========== Mostrando solo el nombre por el ID ==========");
+		String name = repository.getNameById(id); // Obtiene el nombre de la persona por su ID utilizando una consulta personalizada
+		System.out.println(name); // Imprime el nombre obtenido
+
+		System.out.println("========== Mostrando solo el ID por el ID ==========");
+		Long idDb = repository.getById(id); // Obtiene el ID de la persona por su ID utilizando una consulta personalizada
+		System.out.println(idDb); // Imprime el ID obtenido
+
+		System.out.println("========== Mostrando el nombre completo por el ID ==========");
+		String fullName = repository.getFullNameById(id); // Obtiene el nombre completo de la persona por su ID utilizando una consulta personalizada
+		System.out.println(fullName); // Imprime el nombre completo obtenido
+
+		System.out.println("========== Consultas por campos personalizados por el ID ==========");
+		Object[] personReg = (Object[]) repository.obtenerPersonDataById(id); // Obtiene los campos personalizados de la persona por su ID utilizando una consulta personalizada
+		System.out.println("ID: " + personReg[0] + ", Nombre: " + personReg[1] + ", Apellido: " + personReg[2] + ", Lenguaje de Programación: " + personReg[3]); // Imprime los campos personalizados obtenidos
+
+		System.out.println("========== Consultas por campos personalizados de todas las personas ==========");
+		List<Object[]> regs = repository.obtenerPersonDataList(); // Obtiene los campos personalizados de todas las personas utilizando una consulta personalizada
+		regs.forEach(reg -> System.out.println("ID: " + reg[0] + ", Nombre: " + reg[1] + ", Apellido: " + reg[2] + ", Lenguaje de Programación: " + reg[3])); // Imprime los campos personalizados obtenidos para cada persona
 	}
 
 	@Transactional
@@ -39,7 +85,7 @@ public class SpringbootJpaApplication implements CommandLineRunner{
 		
 		Optional<Person> optionalPerson = repository.findById(id); // Busca la persona por su ID
 
-		optionalPerson.ifPresentOrElse(person -> repository.delete(person), 
+		optionalPerson.ifPresentOrElse(repository::delete, 
 		() -> System.out.println("La persona no existe")); // Elimina la persona si existe, de lo contrario muestra un mensaje
 
 		repository.findAll().forEach(System.out::println);

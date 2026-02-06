@@ -29,6 +29,15 @@ public class Person {
     public Person() {
     }
 
+    
+
+    public Person(String name, String lastname) {
+        this.name = name;
+        this.lastname = lastname;
+    }
+
+
+
     // Constructores
     public Person(Long id, String name, String lastname, String programmingLanguage) {
         this.id = id;
