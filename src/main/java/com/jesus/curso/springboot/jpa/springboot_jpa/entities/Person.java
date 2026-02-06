@@ -72,6 +72,7 @@ public class Person {
                 + programmingLanguage + "]";
     }
 
+    // Método para simular la consulta a la base de datos
     public List<Person> findAll() {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'findAll'");
