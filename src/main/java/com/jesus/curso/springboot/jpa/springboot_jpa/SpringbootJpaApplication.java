@@ -8,12 +8,13 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.jesus.curso.springboot.jpa.springboot_jpa.entities.Person;
+import com.jesus.curso.springboot.jpa.springboot_jpa.repositories.PersonRepository;
 
 @SpringBootApplication
 public class SpringbootJpaApplication implements CommandLineRunner{
 
 	@Autowired
-	private Person repository;
+	private PersonRepository repository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(SpringbootJpaApplication.class, args);
@@ -22,7 +23,8 @@ public class SpringbootJpaApplication implements CommandLineRunner{
 	@Override // CommandLineRunner
 	public void run(String... args) throws Exception {
 		// Create
-		List<Person> persons = (List<Person>) repository.findAll();
+		//List<Person> persons = (List<Person>) repository.findAll();
+		List<Person> persons = (List<Person>) repository.findByProgrammingLanguageAndName("Java", "Andres");
 		// Read
 		persons.stream().forEach(person -> {
 			System.out.println(person);

@@ -78,6 +78,11 @@ public class Person {
         throw new UnsupportedOperationException("Unimplemented method 'findAll'");
     }
 
+    public List<Person> findByProgrammingLanguage(String string) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'findByProgrammingLanguage'");
+    }
+
     
     
 
