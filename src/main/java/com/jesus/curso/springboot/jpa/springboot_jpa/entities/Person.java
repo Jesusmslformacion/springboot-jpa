@@ -83,13 +83,12 @@ public class Person {
 
     // Método para simular la consulta a la base de datos
     public List<Person> findAll() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findAll'");
+        return null;
+        
     }
 
     public List<Person> findByProgrammingLanguage(String string) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findByProgrammingLanguage'");
+        return null;
     }
 
     

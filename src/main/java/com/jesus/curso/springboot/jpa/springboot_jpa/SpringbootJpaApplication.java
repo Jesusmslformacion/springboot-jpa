@@ -1,5 +1,6 @@
 package com.jesus.curso.springboot.jpa.springboot_jpa;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 //import java.util.Optional;
@@ -28,17 +29,86 @@ public class SpringbootJpaApplication implements CommandLineRunner{
 	@Override // CommandLineRunner
 	public void run(String... args) throws Exception {
 		
-		personalizedQueriesBetween();
+		whereIn();
 	}
+
+	@Transactional(readOnly = true)
+	public void whereIn() {
+		System.out.println("========== Consulta where in ==========");
+		List<Person> persons = repository.getPersonsByIds(Arrays.asList(1L, 2L, 5L, 8L));
+		persons.forEach(System.out::println);
+	}
+
+	@Transactional(readOnly = true)
+	public void subQueries() {
+		System.out.println("========== Consulta con el nombre mas corto y su largo ==========");
+		List<Object[]> registers = repository.getShorterName();
+		registers.forEach(reg -> {
+			String name = (String)reg[0];
+			Integer length = (Integer)reg[1];
+			System.out.println("name=" + name + ", length=" + length);
+		});
+
+		System.out.println("========== Consulta obtener el ultimo registro de persona ==========");
+		Optional<Person> optionalPerson = repository.getLastRegistration();
+		optionalPerson.ifPresent(System.out::println);
+
+	}
+
+	@Transactional(readOnly = true)
+	public void queriesFunctionAggregation() {
+
+		System.out.println("========== Consulta con el nombre mas corto ==========");
+		Integer minLengthName = repository.getMinLengthName();
+		System.out.println(minLengthName);
+
+		System.out.println("========== Consulta con el nombre mas largo ==========");
+		Integer maxLengthName = repository.getMaxLengthName();
+		System.out.println(maxLengthName);
+
+		System.out.println("========== Consulta con el total de registros de la tabla persona ==========");
+		Long count = repository.getTotalPerson();
+		System.out.println(count);
+
+		System.out.println("========== Consulta con el valor minimo del id ==========");
+		Long min = repository.getMinId();
+		System.out.println(min);
+
+		System.out.println("========== Consulta con el valor maximo del id ==========");
+		Long max = repository.getMaxId();
+		System.out.println(max);
+
+		System.out.println("========== Consulta con el nombre y su largo ==========");
+		List<Object[]> regs = repository.getPersonNameLength();
+		regs.forEach(reg -> {
+			String name = (String)reg[0];
+			Integer length = (Integer)reg[1];
+			System.out.println("name=" + name + ", length=" + length);
+
+			System.out.println("========== Consultas resumen de funciones de agregacion min, max, sum, avg, count ==========");
+			Object[] resumeReg = (Object[]) repository.getResumeAggregationFunction();
+			System.out.println(
+				"min=" + resumeReg[0] + 
+				", max=" + resumeReg[1] + 
+				", sum=" + resumeReg[2] + 
+				", avg=" + resumeReg[3] + 
+				", count" + resumeReg[4]);
+		});
+	}
+
 
 	@Transactional(readOnly = true)
 	public void personalizedQueriesBetween(){
 		System.out.println("========== Consulta por rangos ==========");
-		List<Person> persons = repository.findAllBetweenId(2L,5L);
+		List<Person> persons = repository.findByIdBetweenOrderByNameAsc(2L,5L);
 		persons.forEach(System.out::println);
 
-		persons = repository.findAllBetweenName("J","Q");
+		persons = repository.findByNameBetweenOrderByNameDescLastnameDesc("J","Q");
 		persons.forEach(System.out::println);
+
+		persons = repository.findAllByOrderByNameAscLastnameDesc();
+		persons.forEach(System.out::println);
+
 	}
 
 	@Transactional(readOnly = true)
