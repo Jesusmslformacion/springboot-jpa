@@ -29,7 +29,7 @@ public class SpringbootJpaApplication implements CommandLineRunner{
 	@Override // CommandLineRunner
 	public void run(String... args) throws Exception {
 		
-		whereIn();
+		update();
 	}
 
 	@Transactional(readOnly = true)
@@ -252,7 +252,7 @@ public class SpringbootJpaApplication implements CommandLineRunner{
 		scanner.close(); // Cierra el scanner para liberar recursos
 	}
 
-	@Transactional(readOnly = true) // Anotación para indicar que el método es de solo lectura y no realizará modificaciones en la base de datos
+	@Transactional // Anotación para indicar que el método es de solo lectura y no realizará modificaciones en la base de datos
 	public void create() { // Método para crear una nueva persona
 
 		// Scanner para leer la entrada del usuario
