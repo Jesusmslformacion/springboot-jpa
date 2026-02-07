@@ -11,6 +11,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.jesus.curso.springboot.jpa.springboot_jpa.dto.PersonDto;
 import com.jesus.curso.springboot.jpa.springboot_jpa.entities.Person;
 import com.jesus.curso.springboot.jpa.springboot_jpa.repositories.PersonRepository;
 
@@ -27,7 +28,47 @@ public class SpringbootJpaApplication implements CommandLineRunner{
 	@Override // CommandLineRunner
 	public void run(String... args) throws Exception {
 		
-		personalizedQueries2();
+		personalizedQueriesConcatUpperAndLowerCase();
+	}
+
+	@Transactional(readOnly = true)
+	public void personalizedQueriesConcatUpperAndLowerCase() {
+		System.out.println("========== Consulta nombre y apellidos de las personas concatenados en mayusculas y minusculas ==========");
+		List<String> names = repository.findAllFullNameConcat(); // Obtiene el nombre completo
+		names.forEach(System.out::println);
+
+		System.out.println("========== Consulta nombre y apellidos de las personas concatenados en mayusculas ==========");
+		names = repository.findAllFullNameConcatUpper(); // Obtiene el nombre completo en mayuscula
+		names.forEach(System.out::println);
+
+		System.out.println("========== Consulta nombre y apellidos de las personas concatenados en minusculas ==========");
+		names = repository.findAllFullNameConcatLower(); // Obtiene el nombre completo en minuscula
+		names.forEach(System.out::println);
+
+		System.out.println("========== Consulta con campos personalizados concatenados en mayusculas y minusculas ==========");
+		List<Object[]> personRegs = repository.findAllPersonDataListCase(); // Obtiene los campos personalizados de la persona por su ID utilizando una consulta personalizada
+		personRegs.forEach(reg -> {
+			System.out.println("ID: " + reg[0] + ", Nombre: " + reg[1] + ", Apellido: " + reg[2] + ", Lenguaje de Programación: " + reg[3]);
+		}); // Imprime los campos personalizados obtenidos
+	}
+
+	@Transactional(readOnly = true)
+	public void personalizedQueriesDistinct() {
+		System.out.println("========== Consuktas con nombres personalizados ==========");
+		List<String> names = repository.findAllNames(); // Obtiene solo los nombres de las
+		names.forEach(System.out::println);
+
+		System.out.println("========== Consultas con nombres unicos personalizados ==========");
+		names = repository.findAllNamesDistinct(); // Obtiene solo los nombres distintos de las personas utilizando la convención de nombres de Spring Data JPA
+		names.forEach(System.out::println);
+
+		System.out.println("========== Consultas con lenguajes de programación distintos personalizados ==========");
+		List<String> languages = repository.findAllProgrammingLanguagesDistinct(); // Obtiene solo los lenguajes de programación distintos de las personas utilizando la convención de nombres de Spring Data JPA
+		languages.forEach(System.out::println);
+
+		System.out.println("========== Consultas con conteo de lenguajes de programación distintos personalizados ==========");
+		Long totalLanguage = repository.findAllProgrammingLanguagesDistinctCount(); // Obtiene el conteo de lenguajes de programación distintos de las personas utilizando la convención de nombres de Spring Data JPA
+		System.out.println("Total de lenguajes de programacion distintos: " + totalLanguage); 
 	}
 
 	@Transactional(readOnly = true)
@@ -43,6 +84,10 @@ public class SpringbootJpaApplication implements CommandLineRunner{
 		List<Person> persons = repository.findAllObjectPersonPersonalized(); // Obtiene los campos personalizados de la persona por su ID utilizando una consulta personalizada
 		persons.forEach(System.out::println);
 		 // Imprime los campos personalizados obtenidos
+
+		 System.out.println("========== Consulta que devuelve un DTO personalizado ==========");
+		 List<PersonDto> personDto = repository.findAllPersonDto(); // Obtiene los campos personalizados de la persona por su ID utilizando una consulta personalizada
+		 personDto.forEach(System.out::println);
 	}	
 
 	@Transactional(readOnly = true)

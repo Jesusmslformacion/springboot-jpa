@@ -1,6 +1,6 @@
 package com.jesus.curso.springboot.jpa.springboot_jpa.dto;
 
-public class PersonDto {
+public class PersonDto { // DTO (Data Transfer Object) para la entidad Person
 
     // Atributos del DTO
     private String name;
@@ -27,5 +27,11 @@ public class PersonDto {
         this.lastname = lastname;
     }
 
+    @Override
+    public String toString() {
+        return "PersonDto [name=" + name + ", lastname=" + lastname + "]";
+    }
+
+    
     
 }
